@@ -91,19 +91,21 @@ The app features:
 ✅ Safari (latest)  
 ✅ Edge (latest)  
 
+## Completed Features
+
+Recently implemented:
+- [x] Due dates for items - Add optional due dates to items with smart formatting (Today, Tomorrow, or date)
+
 ## Future Enhancements
 
 Possible features for future versions:
 - [ ] Categories for different types of items
 - [ ] Priority levels (high, medium, low)
-- [ ] Due dates for items
 - [ ] Share list with others
 - [ ] Dark mode toggle
 - [ ] Multiple lists support
 
-## License
 
-This project is open source and available under the MIT License.
 
 ## Author
 

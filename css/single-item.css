@@ -15,11 +15,34 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
 .single-item p {
   text-transform: capitalize;
   font-size: 1rem;
   color: #333;
   font-weight: 500;
+  margin: 0;
+}
+
+.due-date {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 400;
+  padding: 0.2rem 0.5rem;
+  background: #e8eaf6;
+  border-radius: 0.25rem;
+  width: fit-content;
+}
+
+.due-date.overdue {
+  color: #d32f2f;
+  background: #ffebee;
+  font-weight: 600;
 }
 
 .single-item input[type="checkbox"] {

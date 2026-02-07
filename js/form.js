@@ -11,9 +11,15 @@ export function createForm(editId, itemToEdit) {
         type="text"
         class="form-input"
         placeholder="e.g. eggs"
+        value="${itemToEdit ? itemToEdit.name : ''}"
+      />
+      <input
+        type="date"
+        class="form-date"
+        value="${itemToEdit && itemToEdit.dueDate ? itemToEdit.dueDate : ''}"
       />
       <button type="submit" class="btn">
-        add item
+        ${editId ? 'update item' : 'add item'}
       </button>
     </div>
   `;
@@ -21,18 +27,21 @@ export function createForm(editId, itemToEdit) {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const input = form.querySelector(".form-input");
+    const dateInput = form.querySelector(".form-date");
     const value = input.value.trim();
+    const dueDate = dateInput.value;
 
     if (!value) {
       alert("Please provide value");
       return;
     }
 if (editId) {
-      updateItemName(value);
+      updateItemName(value, dueDate);
     } else {    
-    addItem(value);
+    addItem(value, dueDate);
     }
     input.value = "";
+    dateInput.value = "";
   });
 
   return form;

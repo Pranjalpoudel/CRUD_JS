@@ -37,11 +37,12 @@ function generateId() {
 }
 
 // Add Item Function
-export function addItem(itemName) {
+export function addItem(itemName, dueDate = null) {
   const newItem = {
     name: itemName,
     completed: false,
     id: generateId(),
+    dueDate: dueDate || null,
   };
   items = [...items, newItem];
   setLocalStorage(items);
@@ -70,10 +71,10 @@ export function removeItem(itemId) {
   setTimeout(() => alert("Item Deleted Successfully!"), 0);
 }
 // Update Item Name Function
-export function updateItemName(newName) {
+export function updateItemName(newName, newDueDate = null) {
   items = items.map((item) => {
     if (item.id === editId) {
-      return { ...item, name: newName };
+      return { ...item, name: newName, dueDate: newDueDate || item.dueDate };
     }
     return item;
   });
