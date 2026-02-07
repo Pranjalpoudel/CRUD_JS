@@ -1,10 +1,9 @@
-import { editCompleted, removeItem } from "./app.js";
+import { editCompleted, removeItem, setEditId } from "./app.js";
 
 // Create SingleItem Element
 export function createSingleItem(item) {
   const div = document.createElement("div");
   div.className = "single-item";
-
   div.innerHTML = `
     <input type="checkbox" ${item.completed ? "checked" : ""} />
     <p style="text-decoration: ${item.completed ? "line-through" : "none"}">
@@ -21,6 +20,9 @@ export function createSingleItem(item) {
   
   const checkbox = div.querySelector('input[type="checkbox"]');
   checkbox.addEventListener("change", () => editCompleted(item.id));
+  // Add event listener for edit button
+  const editBtn = div.querySelector(".edit-btn");
+  editBtn.addEventListener("click", () => setEditId(item.id));
   // Add event listener for remove button
   const removeBtn = div.querySelector(".remove-btn");
   removeBtn.addEventListener("click", () => removeItem(item.id));
