@@ -1,5 +1,7 @@
 # Grocery Bud 🛒
 
+![App Output](output.png)
+
 A simple, modern grocery list app that helps you manage your shopping items with ease. Built with vanilla JavaScript, HTML, and CSS.
 
 ## Features
