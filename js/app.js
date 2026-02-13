@@ -3,6 +3,44 @@
 import { createItems } from "./items.js";
 import { createForm } from "./form.js";
 
+// Toast Notification System
+let toastId = 0;
+
+function showToast(message, type = "success", duration = 3000) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+  
+  const id = ++toastId;
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.id = `toast-${id}`;
+  
+  toast.innerHTML = `
+    <span>${message}</span>
+    <button class="close-btn" onclick="hideToast(${id})">&times;</button>
+  `;
+  
+  container.appendChild(toast);
+  
+  // Auto remove after duration
+  setTimeout(() => hideToast(id), duration);
+}
+
+function hideToast(id) {
+  const toast = document.getElementById(`toast-${id}`);
+  if (toast) {
+    toast.classList.add("hide");
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
+  }
+}
+
+// Make hideToast globally available
+window.hideToast = hideToast;
+
 function getLocalStorage() {
   const list = localStorage.getItem("grocery-list");
   if (list) {
@@ -47,7 +85,7 @@ export function addItem(itemName, dueDate = null) {
   items = [...items, newItem];
   setLocalStorage(items);
   render();
-  setTimeout(() => alert("Item Added Successfully!"), 0);
+  showToast("Item Added Successfully!", "success");
 }   
 // Initialize App
 render();
@@ -68,7 +106,7 @@ export function removeItem(itemId) {
   items = items.filter((item) => item.id !== itemId);
   setLocalStorage(items);
   render();
-  setTimeout(() => alert("Item Deleted Successfully!"), 0);
+  showToast("Item Deleted Successfully!", "success");
 }
 // Update Item Name Function
 export function updateItemName(newName, newDueDate = null) {
@@ -81,7 +119,7 @@ export function updateItemName(newName, newDueDate = null) {
   editId = null;
   setLocalStorage(items);
   render();
-  setTimeout(() => alert("Item Updated Successfully!"), 0);
+  showToast("Item Updated Successfully!", "success");
 }
 
 // Set Edit ID Function
