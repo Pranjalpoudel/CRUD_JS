@@ -17,79 +17,186 @@
         position: fixed;
         top: 20px;
         right: 20px;
-        z-index: 1000;
+        z-index: 10000;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+        pointer-events: none;
+      }
+      
+      /* Subtle body vibration effect */
+      @keyframes subtleVibrate {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-1px); }
+        20%, 40%, 60%, 80% { transform: translateX(1px); }
       }
       
       .toast {
-        padding: 12px 20px;
-        border-radius: 4px;
+        padding: 18px 22px;
+        border-radius: 16px;
         color: white;
-        font-weight: 500;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        animation: slideIn 0.3s ease-out;
-        min-width: 250px;
+        font-weight: 600;
+        font-size: 16px;
+        box-shadow: 
+          0 15px 35px rgba(0, 0, 0, 0.3), 
+          0 5px 15px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        animation: toastIn 0.6s cubic-bezier(0.21, 1.02, 0.73, 1) forwards;
+        min-width: 320px;
+        max-width: 420px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        pointer-events: auto;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        transform: translateX(120%) scale(0.8);
+        opacity: 0;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex: 1;
+        z-index: 2;
+        position: relative;
+      }
+      
+      .toast-icon {
+        font-size: 22px;
+        min-width: 28px;
+        text-align: center;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        animation: iconPop 0.3s ease-out 0.3s both;
+      }
+      
+      @keyframes iconPop {
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.2); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      
+      .toast-message {
+        flex: 1;
       }
       
       .toast.success {
-        background-color: #4CAF50;
+        background: linear-gradient(135deg, #4CAF50, #2E7D32, #81C784);
+        box-shadow: 
+          0 15px 35px rgba(76, 175, 80, 0.3), 
+          0 5px 15px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
       }
       
       .toast.error {
-        background-color: #f44336;
+        background: linear-gradient(135deg, #f44336, #c62828, #e57373);
+        box-shadow: 
+          0 15px 35px rgba(244, 67, 54, 0.3), 
+          0 5px 15px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
       }
       
       .toast.info {
-        background-color: #2196F3;
+        background: linear-gradient(135deg, #2196F3, #1565C0, #64B5F6);
+        box-shadow: 
+          0 15px 35px rgba(33, 150, 243, 0.3), 
+          0 5px 15px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
       }
       
-      .toast-warning {
-        background-color: #FF9800;
+      .toast.warning {
+        background: linear-gradient(135deg, #FF9800, #EF6C00, #FFB74D);
+        box-shadow: 
+          0 15px 35px rgba(255, 152, 0, 0.3), 
+          0 5px 15px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
       }
       
       .toast .close-btn {
-        background: none;
+        background: rgba(255, 255, 255, 0.2);
         border: none;
         color: white;
         cursor: pointer;
-        font-size: 16px;
-        margin-left: 10px;
-        opacity: 0.8;
+        font-size: 20px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 12px;
+        opacity: 0.9;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
       
       .toast .close-btn:hover {
+        background: rgba(255, 255, 255, 0.35);
+        transform: scale(1.15) rotate(90deg);
         opacity: 1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
       
-      @keyframes slideIn {
-        from {
-          transform: translateX(100%);
+      @keyframes toastIn {
+        0% {
+          transform: translateX(130%) scale(0.7) rotate(5deg);
           opacity: 0;
         }
-        to {
-          transform: translateX(0);
+        40% {
+          transform: translateX(-10%) scale(1.08) rotate(-2deg);
+          opacity: 1;
+        }
+        70% {
+          transform: translateX(3%) scale(0.98) rotate(1deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(0) scale(1) rotate(0);
           opacity: 1;
         }
       }
       
-      @keyframes slideOut {
-        from {
-          transform: translateX(0);
+      @keyframes toastOut {
+        0% {
+          transform: translateX(0) scale(1) rotate(0);
           opacity: 1;
         }
-        to {
-          transform: translateX(100%);
+        30% {
+          transform: translateX(5%) scale(1.05) rotate(2deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(130%) scale(0.7) rotate(-5deg);
           opacity: 0;
         }
       }
       
       .toast.hide {
-        animation: slideOut 0.3s ease-out forwards;
+        animation: toastOut 0.4s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+      }
+      
+      /* Progress bar for auto-dismiss */
+      .toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 0 0 12px 12px;
+        width: 100%;
+        transform-origin: left;
+        animation: progressShrink linear forwards;
+      }
+      
+      @keyframes progressShrink {
+        from { transform: scaleX(1); }
+        to { transform: scaleX(0); }
       }
     </style>
   </head>

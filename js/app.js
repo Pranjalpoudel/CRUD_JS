@@ -6,21 +6,85 @@ import { createForm } from "./form.js";
 // Toast Notification System
 let toastId = 0;
 
-function showToast(message, type = "success", duration = 3000) {
+// Sound effects
+function playSound(type) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    // Different frequencies for different types
+    const frequencies = {
+      success: 523.25, // C5
+      error: 220,      // A3
+      info: 392,       // G4
+      warning: 311.13  // D#4
+    };
+    
+    oscillator.frequency.value = frequencies[type] || 440;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
+  } catch (e) {
+    // Audio API not supported, silently fail
+  }
+}
+
+// Subtle vibration (for devices that support it)
+function triggerVibration() {
+  if ('vibrate' in navigator) {
+    navigator.vibrate([10, 5, 10]);
+  }
+}
+
+function showToast(message, type = "success", duration = 4000) {
   const container = document.getElementById("toast-container");
   if (!container) return;
+  
+  // Play sound effect
+  playSound(type);
+  
+  // Trigger subtle vibration on mobile
+  if (type === 'success' || type === 'error') {
+    triggerVibration();
+  }
   
   const id = ++toastId;
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
   toast.id = `toast-${id}`;
   
+  // Get icon based on type
+  const icons = {
+    success: "✓",
+    error: "✕",
+    info: "ℹ",
+    warning: "⚠"
+  };
+  
   toast.innerHTML = `
-    <span>${message}</span>
+    <div class="toast-content">
+      <div class="toast-icon">${icons[type] || "ℹ"}</div>
+      <div class="toast-message">${message}</div>
+    </div>
     <button class="close-btn" onclick="hideToast(${id})">&times;</button>
+    <div class="toast-progress" style="animation-duration: ${duration}ms"></div>
   `;
   
   container.appendChild(toast);
+  
+  // Trigger animation
+  setTimeout(() => {
+    toast.style.transform = "translateX(0) scale(1) rotate(0)";
+    toast.style.opacity = "1";
+  }, 10);
   
   // Auto remove after duration
   setTimeout(() => hideToast(id), duration);
